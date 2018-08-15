@@ -1,4 +1,133 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-08-15T13:18:26+09:00</updated><id>http://localhost:4000/</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2018-08-15T11:27:24+09:00</published><updated>2018-08-15T11:27:24+09:00</updated><id>http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-08-15T14:13:14+09:00</updated><id>http://localhost:4000/</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Loss functions</title><link href="http://localhost:4000/jekyll/update/2018/08/15/Loss-functions.html" rel="alternate" type="text/html" title="Loss functions" /><published>2018-08-15T11:28:24+09:00</published><updated>2018-08-15T11:28:24+09:00</updated><id>http://localhost:4000/jekyll/update/2018/08/15/Loss-functions</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/08/15/Loss-functions.html">&lt;h1 id=&quot;loss-functions&quot;&gt;Loss functions&lt;/h1&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;딥러닝 하다보면 그냥 사용했던 &lt;code class=&quot;highlighter-rouge&quot;&gt;Loss Function&lt;/code&gt;들에 대해서 한번 다뤄 본다.&lt;/p&gt;
+
+&lt;h2 id=&quot;entropy&quot;&gt;Entropy&lt;/h2&gt;
+
+&lt;p&gt;정보를 최적으로 인코딩하기 위해 필요한 &lt;code class=&quot;highlighter-rouge&quot;&gt;bit&lt;/code&gt;의 수
+$\log_{2}^{}{N}$&lt;/p&gt;
+
+&lt;h3 id=&quot;요일-예시-uniform&quot;&gt;요일 예시 (Uniform)&lt;/h3&gt;
+
+&lt;p&gt;만약 요일에 대한 정보를 메시지에 실어서 보내야 한다면 가장 최소의 bit를 사용한다면 얼마나 될까?
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Yes&lt;/code&gt;/&lt;code class=&quot;highlighter-rouge&quot;&gt;No&lt;/code&gt;수준이라면 그냥 1 bit만으로 충분하다.&lt;/p&gt;
+
+&lt;p&gt;그렇다면 econding을 day of the week을 해야한다고하면, 7 values를 encode 해야한다.
+결국 $\log_{2}^{}{7}$
+&lt;code class=&quot;highlighter-rouge&quot;&gt;월화수..일&lt;/code&gt; 7가지를 bit로 전송하기 위해선 &lt;code class=&quot;highlighter-rouge&quot;&gt;3bit&lt;/code&gt;필요 하게 된다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;bits (000 – Monday, 001 – Tuesday, …, 110 – Sunday, 111- unused).
+    &lt;blockquote&gt;
+      &lt;p&gt;bit의 발생 빈도가 uniform 하다는 가정에 의해서 발생&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;speech-of-a-sequence-of-words-skewness&quot;&gt;Speech of a sequence of words (skewness)&lt;/h3&gt;
+
+&lt;p&gt;만약 영어 단어를 말하는것을 encode 하는 것을 생각해 보자.
+그냥 단순히 uniform하다고 가정하면 $\log_{2}^{}{40} = 5.3$ 이다.&lt;/p&gt;
+
+&lt;p&gt;하지만 4개의 &lt;code class=&quot;highlighter-rouge&quot;&gt;Tag&lt;/code&gt;값들이 &lt;code class=&quot;highlighter-rouge&quot;&gt;90%&lt;/code&gt;가 발생한다면 좀 더 효율적인 &lt;code class=&quot;highlighter-rouge&quot;&gt;bit encode&lt;/code&gt;를 만들어 낼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;40개의 문자가 있고 상위 4개가 90%로 발생한다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ART&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;V&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;아이디어는 첫 번째 &lt;code class=&quot;highlighter-rouge&quot;&gt;bit&lt;/code&gt;를 단순히 위 네개의 TAG를 구분하는데 사용 한다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;YES 이면 추가로 &lt;code class=&quot;highlighter-rouge&quot;&gt;2bit&lt;/code&gt;를 더 필요로 해서 구분하게 된다.&lt;/li&gt;
+  &lt;li&gt;NO 이면 &lt;code class=&quot;highlighter-rouge&quot;&gt;6bit&lt;/code&gt;를 더 필요로 한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;40-4 = 36&lt;/code&gt;이고, $\log_{2}^{}{36}=5.16$&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;정리하면 아래 표와 같다.
+&lt;img src=&quot;https://i.imgur.com/Kuvrqxr.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;이것을 생각한 방식으로 계산하면 아래와 같다.
+필요한 bit수 계산 = $0.9 \times 3 + 0.1 \times 7 = 3.4$&lt;/p&gt;
+
+&lt;p&gt;원래 아이디어 보다 &lt;code class=&quot;highlighter-rouge&quot;&gt;bit&lt;/code&gt;수가 더 줄어 들었다. 거의 반만큼.
+여기서 더 최적화 할 수 있을까?&lt;/p&gt;
+
+&lt;p&gt;Information theory provides an answer.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;As mentioned before, &lt;code class=&quot;highlighter-rouge&quot;&gt;Entropy&lt;/code&gt; is a measure of randomness in a probability distribution.
+A central theorem of information theory states that the entropy of &lt;code class=&quot;highlighter-rouge&quot;&gt;p&lt;/code&gt; specifies the minimum number of bits needed to encode the values of a random variable &lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt; with probability function &lt;code class=&quot;highlighter-rouge&quot;&gt;p&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;definition-of-entropy&quot;&gt;Definition of Entropy&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt;를 &lt;code class=&quot;highlighter-rouge&quot;&gt;random variable&lt;/code&gt;이라고 하면 &lt;code class=&quot;highlighter-rouge&quot;&gt;p&lt;/code&gt;는 probability function이다. 
+&lt;script type=&quot;math/tex&quot;&gt;p(x_{i}) = P(X=x_{i})&lt;/script&gt;
+이라고 한다 (보통 algebra variable과 혼동하지 않기 위해서 capital로 표기하지만 여기선 간소화를 위해서 assumption을 만들고 시작).&lt;/p&gt;
+
+&lt;p&gt;Entropy of X (or p)의 정의는 아래와같다.&lt;/p&gt;
+
+&lt;p&gt;$H(X) = H(p) = - \sum_{i}{p(x_i) \times \log{p(x_i)} }$, where $x_{i}$ ranges over the vocabulary of $X$&lt;/p&gt;
+
+&lt;p&gt;위 식으로 다시 계산해보면 TAG &lt;code class=&quot;highlighter-rouge&quot;&gt;random variable&lt;/code&gt;에 대해서 actual probability distribution을 표1에서와 같이 알기 때문에 TAG의 entropy는 아래와 같이 계산된다.&lt;/p&gt;
+
+&lt;p&gt;$ H(TAG) = -(4 \times (.225 \times \log_{2}{.225}) + 36 \times (.0028 \times \log_{2}{.0028})) = -(-1.04 + -.82 + -.85) = 2.72 $&lt;/p&gt;
+
+&lt;p&gt;결과 값을 통해서 그냥 단순하게 coding 했던것 보다 좋았던 &lt;code class=&quot;highlighter-rouge&quot;&gt;3.4&lt;/code&gt;보다 더 낮은 &lt;code class=&quot;highlighter-rouge&quot;&gt;2.72&lt;/code&gt;가 optimal 이라는것을 알게 되었다.
+하지만, &lt;code class=&quot;highlighter-rouge&quot;&gt;entropy&lt;/code&gt;의 문제는 이게 가장 best한 conding 디자인이 아니라는것만 알려주지 실제로 그래서 어떻게 coding 해야 optimal에 도달하는지를 알려주지 않는다. 더 나아가 physically이게 가능한 것인지도 알 수 없다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Data science에서 보는 값에 따른 해석&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;High Entropy&lt;/code&gt;는 x가 uniform한 distribution을 가지게 된다. 즉 boring하다고 해석할수도 있고 diversity가 높다고 할수도 있다. Active Learning에서 그래서 이러한 Entropy를 이용해서 smapling을 할지 말지를 고려할 수도 있다.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Low Entropy&lt;/code&gt;는 skewness가 높다고 할 수 있다. 결국 varied distribution이라 할 수 있고 &lt;code class=&quot;highlighter-rouge&quot;&gt;peak&lt;/code&gt;나 &lt;code class=&quot;highlighter-rouge&quot;&gt;valley&lt;/code&gt;가 많다고 할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;cross-entropy&quot;&gt;Cross-Entropy&lt;/h2&gt;
+
+&lt;p&gt;두개의 probability function을 비교하는것이 cross entropy이다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;p&lt;/code&gt;와 &lt;code class=&quot;highlighter-rouge&quot;&gt;q&lt;/code&gt;로 구분한다.
+이러한 &lt;code class=&quot;highlighter-rouge&quot;&gt;Cross Entropy&lt;/code&gt;는 symmetric하지 않기 때문에 그 역은 성립하지 않는다.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;p&lt;/code&gt;를 보통 target으로 &lt;code class=&quot;highlighter-rouge&quot;&gt;q&lt;/code&gt;를 estimated one으로 설정한다.
+그렇게 비교해서 얼마나 서로 가까운지를 알아내서 그것을 최적화하는 방법으로 학습에 사용한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;H(p,q)= -\sum _{ i }{ p(x_{ i }) } \log { q(x_{ i }) }&lt;/script&gt;
+
+&lt;p&gt;$p_{y=1} = y$ 이고 $p_{y=0} = 1-y$ 라면,  $p \in (y, 1-y), q \in (\hat{y} ,1-\hat{y})$&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;H(p,q)= -\sum _{ i }{ p(x_{ i }) } \log { q(x_{ i }) } = -y\ln{\hat{y}} + (1-y)\ln(1-\hat{y})&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;MSE의 문제점&lt;/strong&gt;
+&lt;script type=&quot;math/tex&quot;&gt;MSE = C = \frac{2}&lt;/script&gt;
+&lt;script type=&quot;math/tex&quot;&gt;a = \sigma(z)&lt;/script&gt;
+&lt;script type=&quot;math/tex&quot;&gt;z = wx+b&lt;/script&gt;
+위의 것을 미분하면,
+&lt;script type=&quot;math/tex&quot;&gt;\frac{\partial C}{\partial w} = (a-y)\sigma^{\prime}  {(z)} x&lt;/script&gt;
+$\sigma^{\prime}  {(z)}$ 값이 최대 &lt;code class=&quot;highlighter-rouge&quot;&gt;0.25&lt;/code&gt;가 나오고 대부분 0이기 때문에 vanishing gradient가 생기는건 잘알려진 사실이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;cross entropy 미분&lt;/strong&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;C= -\frac{1}{n} \sum_{x}^{}{y\ln{a} + (1-y)\ln(1-a)}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac { \partial C }{ \partial w_{ j } } =-\frac { 1 }{ n } \sum _{ x }{ (\frac { y }{ \sigma (z) } -\frac { (1-y) }{ 1-\sigma (z) } ) } \frac { \partial \sigma  }{ \partial w_{ j } } \\ =-\frac { 1 }{ n } \sum _{ x }{ (\frac { y }{ \sigma (z) } -\frac { (1-y) }{ 1-\sigma (z) } ) } \sigma ^{ \prime  }(z)x_{ j }\\ =\frac { 1 }{ n } \sum _{ x }{ \frac { \sigma ^{ \prime  }(z)x_{ j } }{ \sigma (z)(1-\sigma (z)) }  } \sigma ^{ \prime  }(z)-y&lt;/script&gt;
+
+&lt;p&gt;최종적으로 아래식 처럼 $\sigma(z)$가 살아있기 때문에 vanishing 문제를 적게 발생 시키는 좋은 폼을 형성한다.
+&lt;script type=&quot;math/tex&quot;&gt;\frac{\partial C}{\partial w_{j}} = \frac{1}{n} \sum_{x}^{}{x_{j}(\sigma(z)-y) }&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;kl-divergence&quot;&gt;KL-divergence&lt;/h2&gt;
+
+&lt;p&gt;두 분포 차이를 줄이기 위해서는 &lt;code class=&quot;highlighter-rouge&quot;&gt;KL-Divergence&lt;/code&gt;를 사용한다.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;D_{KL}(P \parallel Q) = -\sum_{x}^{}{p(x) \log{q(x)}} + \sum_{x}^{}{p(x) \log{p(x)}}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;= H(P,Q) - H(P)&lt;/script&gt;
+
+&lt;h2 id=&quot;참고자료&quot;&gt;참고자료&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.cs.rochester.edu/u/james/CSC248/Lec6.pdf&quot;&gt;Lecture6: Using Entropy for Evaluating and Comparing Probability Distributions&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=zJmbkp9TCXY&amp;amp;list=PL0oFI08O71gKEXITQ7OG2SCCXkrtid7Fq&amp;amp;index=21&quot;&gt;정보량을 나타내는 앤트로피(Entropy)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=uMYhthKw1PU&quot;&gt;4.1. Cross entropy와 KL divergence&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Loss functions</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2018-08-15T11:27:24+09:00</published><updated>2018-08-15T11:27:24+09:00</updated><id>http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/08/15/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
 
